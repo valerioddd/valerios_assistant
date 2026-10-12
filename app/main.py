@@ -15,21 +15,22 @@ def _recap_path() -> str:
     return f"{config.RECAPS_DIR}/{_now():%Y-%m-%d}.md"
 
 
-async def _process_text(text: str) -> str:
+async def _process_text(text: str) -> tuple[str, str]:
     current, _ = await github_store.read_file(config.TASKS_PATH)
     result = await brain.classify_and_act(current, text)
     action = result.get("action")
+    tasks_md = current
     if action in ("update_tasks", "both") and result.get("new_tasks_md"):
+        tasks_md = result["new_tasks_md"].strip() + "\n"
         await github_store.write_file(
-            config.TASKS_PATH, result["new_tasks_md"].strip() + "\n",
-            "chore(tasks): update via assistant",
+            config.TASKS_PATH, tasks_md, "chore(tasks): update via assistant",
         )
     if action in ("add_note", "both") and result.get("recap_note"):
         await github_store.append_to_file(
             _recap_path(), f"- {_now():%H:%M} — {result['recap_note'].strip()}",
             "docs(recap): add note via assistant",
         )
-    return result.get("reply") or "Fatto."
+    return result.get("reply") or "Fatto.", tasks_md
 
 
 async def _handle_telegram(msg: dict):
@@ -40,8 +41,9 @@ async def _handle_telegram(msg: dict):
             text = msg["text"]
         else:
             return
-        reply = await _process_text(text)
-        await telegram.send_message(f"📝 _{text}_\n\n{reply}")
+        reply, tasks_md = await _process_text(text)
+        body = tasks_md.strip() or "_Nessun task._"
+        await telegram.send_message(f"📝 _{text}_\n\n{reply}\n\n📋 *Task aggiornati:*\n{body}")
     except Exception as e:
         traceback.print_exc()
         await telegram.send_message(f"⚠️ Errore: {e}")
@@ -81,7 +83,7 @@ async def outlook_ingest(request: Request, x_scheduler_secret: str = Header(defa
         raise HTTPException(403)
     p = await request.json()
     text = f"Email da {p.get('from','?')}. Oggetto: {p.get('subject','')}. Contenuto: {p.get('body','')[:1500]}"
-    reply = await _process_text(text)
+    reply, _ = await _process_text(text)
     await telegram.send_message(f"📧 *Nuova mail → task*\n{p.get('subject','')}\n\n{reply}")
     return {"ok": True}
 
