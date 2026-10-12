@@ -1,0 +1,5 @@
+.DS_Store
+deploy.log
+__pycache__/
+*.pyc
+.env
