@@ -1,1 +1,4 @@
-- [MEDIA] Esempio task — rimuovimi
+- [ALTA] Verificare l'FQDN su ambiente di sviluppo per il modulo KP del progetto giornalità cloud — domani
+- [MEDIA] Verificare lo stato dei ticket per il modulo
+- [MEDIA] Procedere con i nuovi ticket su GTM per la sistemicità
+- [MEDIA] Sentire Emanuele per la sistemicità su esposizione pubblica
