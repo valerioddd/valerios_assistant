@@ -5,7 +5,7 @@ TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 TELEGRAM_SECRET = os.environ["TELEGRAM_SECRET"]
 
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
-GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 GROQ_MODEL_STT = os.environ.get("GROQ_MODEL_STT", "whisper-large-v3-turbo")
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
