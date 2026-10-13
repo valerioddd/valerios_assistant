@@ -1,5 +1,5 @@
 ## Modulo KP (Giornalità Cloud)
-- [ALTA] Verificare l'FQDN su ambiente di sviluppo per il modulo KP del progetto giornalità cloud — domani
+- [ALTA] Verificare l'FQDN su ambiente di sviluppo per il modulo DKP del progetto Journey to Cloud — domani
 
 ## Modulo UI H
 - [ALTA] Ottenere le credenziali da inserire su Jenkins per il modulo UI H
